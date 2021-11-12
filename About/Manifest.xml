@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Manifest>
+  <identifier>DiamondShield</identifier>
+  <version>0.0.1</version>
+ <!-- 
+ <incompatibleWith>
+    
+  </incompatibleWith>
+  <suggests>
+    <li>1677616980</li>
+  </suggests>
+  <loadAfter>
+    
+  </loadAfter>
+  <showCrossPromotions>true</showCrossPromotions>
+  <manifestUri>https://raw.githubusercontent.com/KongMD-Steam/QuestionableEthicsEnhanced/master/About/Manifest.xml</manifestUri>
+  <downloadUri>https://steamcommunity.com/sharedfiles/filedetails/?id=2566962342</downloadUri> 
+  -->
+</Manifest>
