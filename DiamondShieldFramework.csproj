@@ -1,0 +1,141 @@
+﻿<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A2A6EA6B-015F-4A8D-ADE3-0F0E399ACB6E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <AssemblyName>ClassLibrary</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>1.3\Assemblies\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>DiamondShieldFramework</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\..\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>..\..\RimWorldWin64_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\..\RimWorldWin64_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitattributes" />
+    <None Include=".gitignore" />
+    <None Include=".git\COMMIT_EDITMSG" />
+    <None Include=".git\config" />
+    <None Include=".git\description" />
+    <None Include=".git\FETCH_HEAD" />
+    <None Include=".git\HEAD" />
+    <None Include=".git\hooks\applypatch-msg.sample" />
+    <None Include=".git\hooks\commit-msg.sample" />
+    <None Include=".git\hooks\fsmonitor-watchman.sample" />
+    <None Include=".git\hooks\post-update.sample" />
+    <None Include=".git\hooks\pre-applypatch.sample" />
+    <None Include=".git\hooks\pre-commit.sample" />
+    <None Include=".git\hooks\pre-merge-commit.sample" />
+    <None Include=".git\hooks\pre-push.sample" />
+    <None Include=".git\hooks\pre-rebase.sample" />
+    <None Include=".git\hooks\pre-receive.sample" />
+    <None Include=".git\hooks\prepare-commit-msg.sample" />
+    <None Include=".git\hooks\update.sample" />
+    <None Include=".git\index" />
+    <None Include=".git\info\exclude" />
+    <None Include=".git\logs\HEAD" />
+    <None Include=".git\logs\refs\heads\master" />
+    <None Include=".git\logs\refs\remotes\origin\main" />
+    <None Include=".git\logs\refs\remotes\origin\master" />
+    <None Include=".git\objects\0d\5919725b9e10992d5f7109f3bbf02a2acfe662" />
+    <None Include=".git\objects\1c\32093516b24fa11b0d3650230b946435b1fec3" />
+    <None Include=".git\objects\1f\f0c423042b46cb1d617b81efb715defbe8054d" />
+    <None Include=".git\objects\21\965d45f6775adf7a5418b28b3297867f72c186" />
+    <None Include=".git\objects\34\38fd5a5c3e2b8f767a0afaa882d2c1c26b57c9" />
+    <None Include=".git\objects\3c\7dd1dab5b69b8f6dd20c604dd7278429cfb286" />
+    <None Include=".git\objects\3e\57ba95c71310d5ae0c5f778c59dfab61936c53" />
+    <None Include=".git\objects\49\063d13a36497c47be62840393a646a248c1df1" />
+    <None Include=".git\objects\4f\a9edb808dc883071e2207f39294e387c5ee75f" />
+    <None Include=".git\objects\56\9d20ad5e1e61824956b3170481ae63fea889cb" />
+    <None Include=".git\objects\63\0b93e368da9218f469a928e3555804126e673a" />
+    <None Include=".git\objects\6b\61e3b856d43fa72d0aa2ba290502948799c9d8" />
+    <None Include=".git\objects\74\6e03a19c517c1334fb6fa55313d4538f064c62" />
+    <None Include=".git\objects\83\8f8ad3229ea7337816dd09d8ea75aac703b337" />
+    <None Include=".git\objects\90\ffd698c6e50f1348c74568cf5dbc4cd3144dc9" />
+    <None Include=".git\objects\94\91a2fda28342ab358eaf234e1afe0c07a53d62" />
+    <None Include=".git\objects\96\4345b2002f1a4758949251e357d87d50486804" />
+    <None Include=".git\objects\97\51fe1468cecd809349b6b29a25566af3be2268" />
+    <None Include=".git\objects\9a\28cc74c81a2f5ef847c751965c10be33cdb50f" />
+    <None Include=".git\objects\ac\ea4cba8cbf1bd51d92546a6348de3a35075d53" />
+    <None Include=".git\objects\ae\2429247e918fd13c8d16a1889d279379501209" />
+    <None Include=".git\objects\c0\075117d0515f32213beb579f71e176a22cae64" />
+    <None Include=".git\objects\c7\8475a12b07814f080aa3247d24bf3e5dc97484" />
+    <None Include=".git\objects\dd\59d4484a9fc5c38aa5702e1cf3edf4f5de3a1f" />
+    <None Include=".git\objects\de\c3c195c3cbca209d624d7a7b1c530eb7863804" />
+    <None Include=".git\objects\f0\d3a70ceaa69fb70811f58254dc738e0f939eac" />
+    <None Include=".git\ORIG_HEAD" />
+    <None Include=".git\refs\heads\master" />
+    <None Include=".git\refs\remotes\origin\main" />
+    <None Include=".git\refs\remotes\origin\master" />
+    <None Include=".vs\DiamondShield\v16\.suo" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".git\ms-persist.xml" />
+    <Content Include="1.3\Assemblies\ClassLibrary.dll" />
+    <Content Include="1.3\Assemblies\ClassLibrary.pdb" />
+    <Content Include="About\About.xml" />
+    <Content Include="About\Manifest.xml" />
+    <Content Include="About\Preview.png" />
+    <Content Include="About\PublishedFileId.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="1.3\Comps\DShield_TrapDamager.cs" />
+    <Compile Include="1.3\Defs\TrapDef.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include=".git\objects\info\" />
+    <Folder Include=".git\objects\pack\" />
+    <Folder Include=".git\refs\tags\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
+  <ProjectExtensions>
+    <VisualStudio AllowExistingFolder="true" />
+  </ProjectExtensions>
+</Project>
