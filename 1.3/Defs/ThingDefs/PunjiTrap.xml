@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!--
+  <ThingDef Class="DShield.TrapDef" ParentName="BuildingBase">-->
+  <ThingDef ParentName="BuildingBase">
+  <defName>TrapPunjiBasic</defName>
+  <label>punji sticks</label>
+  <description>Spikes hidden in the terrain to deliver a nasty suprise when steped on. Does not break on use. Since it is hidden in the surrounding terrain, it cannot be placed adjacent to other traps. Animals can sense these when calm.</description>
+  <thingClass>DShield.DShield_TrapDamager</thingClass>
+  <graphicData>
+    <texPath>Things/Building/Security/TrapSpikeArmed</texPath>
+    <graphicClass>Graphic_Single</graphicClass>
+    <damageData>
+      <rect>(0,0,1,0.15)</rect>
+    </damageData>
+  </graphicData>
+  <altitudeLayer>Building</altitudeLayer>
+  <rotatable>false</rotatable>
+  <tickerType>Normal</tickerType>
+  <stealable>false</stealable>
+  <minifiedDef>MinifiedThing</minifiedDef>
+  <thingCategories>
+    <li>BuildingsSecurity</li>
+  </thingCategories>
+  <statBases>
+    <Mass>2.5</Mass>
+    <MaxHitPoints>40</MaxHitPoints>
+    <WorkToBuild>3200</WorkToBuild>
+    <Flammability>1</Flammability>
+    <Beauty>-10</Beauty>
+    <Cleanliness>-3</Cleanliness>
+    <TrapMeleeDamage>10</TrapMeleeDamage>
+    <TrapSpringChance>1.0</TrapSpringChance>
+  </statBases>
+  <stuffCategories>
+    <li>Metallic</li>
+    <li>Woody</li>
+    <li>Stony</li>
+  </stuffCategories>
+  <costStuffCount>45</costStuffCount>
+  <designationCategory>Security</designationCategory>
+  <designationHotKey>Misc6</designationHotKey>
+  <building>
+    <isTrap>true</isTrap>
+    <trapDestroyOnSpring>false</trapDestroyOnSpring>
+    <expandHomeArea>false</expandHomeArea>
+    <ai_chillDestination>false</ai_chillDestination>
+  </building>
+  <constructionSkillPrerequisite>3</constructionSkillPrerequisite>
+  <placeWorkers>
+    <li>PlaceWorker_NeverAdjacentTrap</li>
+  </placeWorkers>
+    <modExtensions>
+      <li Class="DShield.TrapDef">
+        <damageType>Stab</damageType>
+        <targetLegs>true</targetLegs>
+      </li>
+    </modExtensions>
+  </ThingDef>
+</Defs>
