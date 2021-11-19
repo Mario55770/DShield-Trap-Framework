@@ -46,8 +46,6 @@
     <None Include=".vs\DiamondShield\v16\.suo" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="1.3\Defs\ThingDefs\PunjiTrap.xml" />
-    <Content Include="1.3\Defs\ThingDefs\SackofBricks.xml" />
     <Content Include="About\About.xml" />
     <Content Include="About\Manifest.xml" />
   </ItemGroup>
