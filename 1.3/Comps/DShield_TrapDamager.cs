@@ -103,6 +103,8 @@ namespace DShield_Framework
 
 
                     DamageWorker.DamageResult damageResult = p.TakeDamage(dinfo);
+
+                    //if hediff is on a limb by limb basis and exists, apply it.
                     if (h != null && !applyHedifftoWholebody)
                     {
                         hediffApplicationComparisons(p, h, hediffFactor, damageResult.LastHitPart);
@@ -137,7 +139,7 @@ namespace DShield_Framework
                         {
                            findPart.Severity += hediffFactor.RandomInRange;
                        // Log.Message(findPart.ToString()); 
-                        break;
+                        return;
 
                         }
                     }
