@@ -23,35 +23,18 @@ namespace DShield_Framework
             }
         }
 
-        //Method that would handle chance of destroyed trap
-        /**	
-		public override void Spring(Pawn p)
-		{
-			bool spawned = base.Spawned;
-			Map map = base.Map;
-			SpringSub(p);
-			if (def.building.trapDestroyOnSpring)
-			{
-				if (!base.Destroyed)
-				{
-					Destroy();
-				}
-				if (spawned)
-				{
-					CheckAutoRebuild(map);
-				}
-			}
-		}**/
+        
         protected override void SpringSub(Pawn p)
         {
             //if fuel is not empty or null, lets class run.
-            if (this.GetComp<CompRefuelable>() == null || this.GetComp<CompRefuelable>().Fuel > 0)
+            CompRefuelable cRefuel = this.GetComp<CompRefuelable>();
+            if (cRefuel == null || cRefuel.Fuel > 0)
             {
                 //handles fuel.
-                if (this.GetComp<CompRefuelable>() != null)
+                if (cRefuel != null)
                 {
 
-                    this.GetComp<CompRefuelable>().ConsumeFuel(this.GetComp<CompRefuelable>().Props.FuelMultiplierCurrentDifficulty);
+                    cRefuel.ConsumeFuel(cRefuel.Props.FuelMultiplierCurrentDifficulty);
                 }
                 float DamageCount = def.GetModExtension<TrapDef>().applyCount;
                 DamageDef damageType = def.GetModExtension<TrapDef>().damageType;
@@ -63,13 +46,12 @@ namespace DShield_Framework
                 
                 float num = this.GetStatValue(StatDefOf.TrapMeleeDamage) * DamageRandomFactorRange.RandomInRange / DamageCount;
                 float armorPenetration = num * 0.015f;
-
-                //null check, should stop this chunk from running if its not defined.
-                //Will need to be moved into loop once I can apply per struck limb.
+                
                 HediffDef h = def.GetModExtension<TrapDef>().appliedHediff;
                 //For some reason this needs to be outside the if statement.
                 FloatRange hediffFactor=new FloatRange(def.GetModExtension<TrapDef>().hediffMinChance, def.GetModExtension<TrapDef>().hediffMaxChance); ;
                 bool applyHedifftoWholebody = def.GetModExtension<TrapDef>().applyHediffToWholeBody;
+                //null check, should stop this chunk from running if its not defined.
                 if (h != null)
                 {
 
@@ -84,9 +66,8 @@ namespace DShield_Framework
                 {
 
                     DamageInfo dinfo;
-                    //This commented out line returns a random element tied to pawn moving
-                    //(from x in p.health.hediffSet.GetNotMissingParts() where x.def.tags.Contains(BodyPartTagDefOf.MovingLimbCore) select x).RandomElement(); The code uses an iteration that uses any from moving limb core, digits, or segments
-                    if (def.GetModExtension<TrapDef>().targetLegs)
+                    
+                   if (def.GetModExtension<TrapDef>().targetLegs)
                     {
 
                         //swap to damage info that targets moving parts
@@ -122,36 +103,57 @@ namespace DShield_Framework
 
         }
 
+        /** private static void hediffApplicationComparisons(Pawn p, HediffDef hediff, FloatRange hediffFactor, BodyPartRecord targetPart)
+         {
+
+             //check if part has a hediff
+             //Designed to confirm pawn is alive and part is nonmissing
+             if (p.health.Dead || p.health.hediffSet.PartIsMissing(targetPart)) //If pawn dead or part missing..
+                 return; //Abort.
+             if (p.health.hediffSet.HasHediff(hediff, targetPart))
+                 {
+
+                     //if so, then search for the hediff in that limb(Feels roundabout but it works)
+                     foreach (Hediff findHediff in p.health.hediffSet.hediffs)
+                     {
+                         //then confirm that, increase severity, and break(to save some minor performance
+                         if (targetPart == findHediff.Part&& findHediff.def==hediff)
+                         {
+                            findHediff.Severity += hediffFactor.RandomInRange;
+                        // Log.Message(findPart.ToString()); 
+                         return;
+
+                         }
+                     }
+                 }    
+                 else //if there is no hediff there yet, then apply one.
+                 {
+                     hediff.initialSeverity = hediffFactor.RandomInRange;
+                     p.health.AddHediff(hediff, targetPart);
+                 //Log.Message("Hediff applied newly");
+             
+             
+
+             }
+         }
+        **/
         private static void hediffApplicationComparisons(Pawn p, HediffDef h, FloatRange hediffFactor, BodyPartRecord targetPart)
         {
-            //check if part has a hediff
-            //Designed to confirm pawn is alive and part is nonmissing
-            if (!p.health.hediffSet.PartIsMissing(targetPart)&&!p.health.Dead)
+            if (p.health.Dead || p.health.hediffSet.PartIsMissing(targetPart)) //If pawn dead or part missing..
+                return; //Abort.
+            bool found = false;
+            foreach (Hediff hediff in p.health.hediffSet.hediffs)
             {
-                if (p.health.hediffSet.HasHediff(h, targetPart))
-                {
-
-                    //if so, then search for the hediff in that limb(Feels roundabout but it works)
-                    foreach (Hediff findPart in p.health.hediffSet.hediffs)
-                    {
-                        //then confirm that, increase severity, and break(to save some minor performance
-                        if (targetPart == findPart.Part&& findPart.def==h)
-                        {
-                           findPart.Severity += hediffFactor.RandomInRange;
-                       // Log.Message(findPart.ToString()); 
-                        return;
-
-                        }
-                    }
-                }    
-                else //if there is no hediff there yet, then apply one.
-                {
-                    h.initialSeverity = hediffFactor.RandomInRange;
-                    p.health.AddHediff(h, targetPart);
-                //Log.Message("Hediff applied newly");
+                if (hediff.def != h || hediff.Part != targetPart)
+                    continue;
+                found = true;
+                hediff.Severity += hediffFactor.RandomInRange;
             }
-
+            if (!found)
+            {
+                h.initialSeverity = hediffFactor.RandomInRange;
+                p.health.AddHediff(h, targetPart);
             }
         }
     }
-}
+    }

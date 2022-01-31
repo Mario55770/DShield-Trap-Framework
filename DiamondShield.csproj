@@ -43,6 +43,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".editorconfig" />
     <None Include=".vs\DiamondShield\v16\.suo" />
   </ItemGroup>
   <ItemGroup>
