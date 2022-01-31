@@ -23,35 +23,18 @@ namespace DShield_Framework
             }
         }
 
-        //Method that would handle chance of destroyed trap
-        /**	
-		public override void Spring(Pawn p)
-		{
-			bool spawned = base.Spawned;
-			Map map = base.Map;
-			SpringSub(p);
-			if (def.building.trapDestroyOnSpring)
-			{
-				if (!base.Destroyed)
-				{
-					Destroy();
-				}
-				if (spawned)
-				{
-					CheckAutoRebuild(map);
-				}
-			}
-		}**/
+        
         protected override void SpringSub(Pawn p)
         {
             //if fuel is not empty or null, lets class run.
-            if (this.GetComp<CompRefuelable>() == null || this.GetComp<CompRefuelable>().Fuel > 0)
+            CompRefuelable cRefuel = this.GetComp<CompRefuelable>();
+            if (cRefuel == null || cRefuel.Fuel > 0)
             {
                 //handles fuel.
-                if (this.GetComp<CompRefuelable>() != null)
+                if (cRefuel != null)
                 {
 
-                    this.GetComp<CompRefuelable>().ConsumeFuel(this.GetComp<CompRefuelable>().Props.FuelMultiplierCurrentDifficulty);
+                    cRefuel.ConsumeFuel(cRefuel.Props.FuelMultiplierCurrentDifficulty);
                 }
                 float DamageCount = def.GetModExtension<TrapDef>().applyCount;
                 DamageDef damageType = def.GetModExtension<TrapDef>().damageType;
@@ -63,13 +46,12 @@ namespace DShield_Framework
                 
                 float num = this.GetStatValue(StatDefOf.TrapMeleeDamage) * DamageRandomFactorRange.RandomInRange / DamageCount;
                 float armorPenetration = num * 0.015f;
-
-                //null check, should stop this chunk from running if its not defined.
-                //Will need to be moved into loop once I can apply per struck limb.
+                
                 HediffDef h = def.GetModExtension<TrapDef>().appliedHediff;
                 //For some reason this needs to be outside the if statement.
                 FloatRange hediffFactor=new FloatRange(def.GetModExtension<TrapDef>().hediffMinChance, def.GetModExtension<TrapDef>().hediffMaxChance); ;
                 bool applyHedifftoWholebody = def.GetModExtension<TrapDef>().applyHediffToWholeBody;
+                //null check, should stop this chunk from running if its not defined.
                 if (h != null)
                 {
 
@@ -84,9 +66,8 @@ namespace DShield_Framework
                 {
 
                     DamageInfo dinfo;
-                    //This commented out line returns a random element tied to pawn moving
-                    //(from x in p.health.hediffSet.GetNotMissingParts() where x.def.tags.Contains(BodyPartTagDefOf.MovingLimbCore) select x).RandomElement(); The code uses an iteration that uses any from moving limb core, digits, or segments
-                    if (def.GetModExtension<TrapDef>().targetLegs)
+                    
+                   if (def.GetModExtension<TrapDef>().targetLegs)
                     {
 
                         //swap to damage info that targets moving parts
