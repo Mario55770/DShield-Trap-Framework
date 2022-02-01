@@ -9,11 +9,16 @@ namespace DShield_Framework
     {
 
         private static readonly FloatRange DamageRandomFactorRange = new FloatRange(0.8f, 1.2f);
-
-
-
-
-
+        private static HediffDef appliedHediff;
+        private static float DamageCount;
+        private static DamageDef damageType;
+        private static FloatRange hediffFactor;
+        private static bool applyHedifftoWholebody;
+        private static bool hediffExistsAndNotAppliedToWholeBody=false;
+        private static bool hediffNotNullAndApplyToWholeBody=false;
+        private static bool targetLegs;
+        private static CompRefuelable compRefuelable;
+        private static bool hasBeenCached = false;
         public override void SpawnSetup(Map map, bool respawningAfterLoad)
         {
             base.SpawnSetup(map, respawningAfterLoad);
@@ -26,8 +31,27 @@ namespace DShield_Framework
 
         protected override void SpringSub(Pawn pawn)
         {
+            if (!hasBeenCached)
+            {
+                
+                 DamageCount = def.GetModExtension<TrapDef>().applyCount;
+                damageType = def.GetModExtension<TrapDef>().damageType;
+                appliedHediff = def.GetModExtension<TrapDef>().appliedHediff;
+                //if appliedHediff Is null I can ignore all this stuff.
+                if (appliedHediff != null)
+                {
+                    hediffFactor = new FloatRange(def.GetModExtension<TrapDef>().hediffMinChance, def.GetModExtension<TrapDef>().hediffMaxChance);
+                    applyHedifftoWholebody = def.GetModExtension<TrapDef>().applyHediffToWholeBody;
+                    //Boolean to prevent a null and boolean check every iteration of a loop. Instead it only checks a single boolean. Should be slightly faster.
+                    hediffExistsAndNotAppliedToWholeBody = !applyHedifftoWholebody;
+                    hediffNotNullAndApplyToWholeBody = applyHedifftoWholebody;
+                }
+                targetLegs = def.GetModExtension<TrapDef>().targetLegs;
+                compRefuelable = this.GetComp<CompRefuelable>();
+                hasBeenCached = true;
+            }
             //if fuel is not empty or null, lets class run.
-            CompRefuelable compRefuelable = this.GetComp<CompRefuelable>();
+
             if (pawn == null || !(compRefuelable == null || compRefuelable.Fuel > 0))
             {
                 return;
@@ -39,37 +63,34 @@ namespace DShield_Framework
 
                 compRefuelable.ConsumeFuel(compRefuelable.Props.FuelMultiplierCurrentDifficulty);
             }
-            float DamageCount = def.GetModExtension<TrapDef>().applyCount;
-            DamageDef damageType = def.GetModExtension<TrapDef>().damageType;
+            
             SoundDefOf.TrapSpring.PlayOneShot(new TargetInfo(base.Position, base.Map));
 
-
+            //this changes on each run
             float num = this.GetStatValue(StatDefOf.TrapMeleeDamage) * DamageRandomFactorRange.RandomInRange / DamageCount;
             float armorPenetration = num * 0.015f;
 
-            HediffDef h = def.GetModExtension<TrapDef>().appliedHediff;
+            
             //For some reason this needs to be outside the if statement.
-            FloatRange hediffFactor = new FloatRange(def.GetModExtension<TrapDef>().hediffMinChance, def.GetModExtension<TrapDef>().hediffMaxChance); 
-            bool applyHedifftoWholebody = def.GetModExtension<TrapDef>().applyHediffToWholeBody;
-            //Boolean to prevent a null and boolean check every iteration of a loop. Instead it only checks a single boolean. Should be slightly faster.
-            bool hediffExistsAndNotAppliedToWholeBody = false;
+            
             //null check, should stop this chunk from running if its not defined.
             //Applies the hediff assuming its applied to whole body instead of on a hit by hit basis(like anesthetic should be)
-            if (h != null && applyHedifftoWholebody)
+            
+            if (hediffNotNullAndApplyToWholeBody)
             {
                 //gives a random severity of hediff between stated range. Defaults to 0 and 1 respectively, which is the default hediff range.
-                HealthUtility.AdjustSeverity(pawn, h, hediffFactor.RandomInRange);
+                HealthUtility.AdjustSeverity(pawn, appliedHediff, hediffFactor.RandomInRange);
             }
             //checks to boolean only if this doesnt run and sets it true here so it doesn't have to be repeadely checked in the loop
             else
             {
-                if (h != null && !applyHedifftoWholebody)
+                if (appliedHediff != null && !applyHedifftoWholebody)
                 {
                     hediffExistsAndNotAppliedToWholeBody = true;
                 }
             }
             //gets variable outside the for loop instead of reading from xml DamageCount times
-            bool targetLegs = def.GetModExtension<TrapDef>().targetLegs;
+            
             for (int i = 0; (float)i < DamageCount; i++)
             {
 
@@ -97,7 +118,7 @@ namespace DShield_Framework
                 //if hediff is on a limb by limb basis and exists, apply it.
                 if (hediffExistsAndNotAppliedToWholeBody)
                 {
-                    hediffApplicationComparisons(pawn, h, hediffFactor, damageResult.LastHitPart);
+                    hediffApplicationComparisons(pawn, appliedHediff, hediffFactor, damageResult.LastHitPart);
                 }
                 //apply damage. Then write to log on the last entry. Copy directly from the original class.
                 damageResult = pawn.TakeDamage(dinfo);
