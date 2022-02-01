@@ -14,8 +14,7 @@ namespace DShield_Framework
         private static DamageDef damageType;
         private static FloatRange hediffFactor;
         private static bool applyHedifftoWholebody;
-        private static bool hediffExistsAndNotAppliedToWholeBody=false;
-        private static bool hediffNotNullAndApplyToWholeBody=false;
+        private static TrapDef trapDef;
         private static bool targetLegs;
         private static CompRefuelable compRefuelable;
         private static bool hasBeenCached = false;
@@ -31,55 +30,58 @@ namespace DShield_Framework
 
         protected override void SpringSub(Pawn pawn)
         {
+            //Ends if pawn is null. 
+            if (pawn == null)
+            {
+                return;
+            }
             //caches stuff. Should make this whole system run slightly faster for traps that are run multiple times
             //improvements are likely negligible to loses in single use per map load.
             //Only runs efforts to cache if it runs as traps may not always be used and so it is pointless to cache it if its not used.
             if (!hasBeenCached)
             {
-                
-                 DamageCount = def.GetModExtension<TrapDef>().applyCount;
-                damageType = def.GetModExtension<TrapDef>().damageType;
-                appliedHediff = def.GetModExtension<TrapDef>().appliedHediff;
+                trapDef = def.GetModExtension<TrapDef>();
+                DamageCount = trapDef.applyCount;
+                damageType = trapDef.damageType;
+                appliedHediff = trapDef.appliedHediff;
                 //if appliedHediff Is null I can ignore all this stuff.
                 if (appliedHediff != null)
                 {
-                    hediffFactor = new FloatRange(def.GetModExtension<TrapDef>().hediffMinChance, def.GetModExtension<TrapDef>().hediffMaxChance);
-                    applyHedifftoWholebody = def.GetModExtension<TrapDef>().applyHediffToWholeBody;
-                    //Boolean to prevent a null and boolean check every iteration of a loop. Instead it only checks a single boolean. Should be slightly faster.
-                    hediffExistsAndNotAppliedToWholeBody = !applyHedifftoWholebody;
-                    hediffNotNullAndApplyToWholeBody = applyHedifftoWholebody;
+                    hediffFactor = new FloatRange(trapDef.hediffMinChance, trapDef.hediffMaxChance);
+                    applyHedifftoWholebody = trapDef.applyHediffToWholeBody;
+
                 }
-                targetLegs = def.GetModExtension<TrapDef>().targetLegs;
+                targetLegs = trapDef.targetLegs;
                 compRefuelable = this.GetComp<CompRefuelable>();
                 hasBeenCached = true;
             }
-            //If pawn is null, or trap uses fuel and is out, end the method. In theory, slight improvements could come from only caching the rest after this test
-            if (pawn == null || !(compRefuelable == null || compRefuelable.Fuel > 0))
-            {
-                return;
-            }
+           
 
-            //handles fuel.
-            if (compRefuelable != null)
+            //Checks if fuel is not null and not zero. If it is then end. 
+            if (compRefuelable ==null || compRefuelable.Fuel > 0)
             {
-
                 compRefuelable.ConsumeFuel(compRefuelable.Props.FuelMultiplierCurrentDifficulty);
             }
             
+                //if it didn't end, double check if fuel needs to be consumed.
+            {
+                
+            }
+
             SoundDefOf.TrapSpring.PlayOneShot(new TargetInfo(base.Position, base.Map));
 
             //this changes on each run ergo it has been kept here. 
             float num = this.GetStatValue(StatDefOf.TrapMeleeDamage) * DamageRandomFactorRange.RandomInRange / DamageCount;
             float armorPenetration = num * 0.015f;
 
-            
+
             //Applies hediff to whole body assuming prior tests are passed(in the event hediff is not null and it should be applied to whole body)
-            if (hediffNotNullAndApplyToWholeBody)
+            if (appliedHediff != null && applyHedifftoWholebody)
             {
                 //gives a random severity of hediff between stated range. Defaults to 0 and 1 respectively, which is the default hediff range.
                 HealthUtility.AdjustSeverity(pawn, appliedHediff, hediffFactor.RandomInRange);
             }
-            
+
             for (int i = 0; (float)i < DamageCount; i++)
             {
 
@@ -93,7 +95,6 @@ namespace DShield_Framework
                     BodyPartRecord targetPart = ((BodyPartRecord)(from x in pawn.health.hediffSet.GetNotMissingParts() where x.def.tags.Contains(BodyPartTagDefOf.MovingLimbCore) || x.def.tags.Contains(BodyPartTagDefOf.MovingLimbDigit) || x.def.tags.Contains(BodyPartTagDefOf.MovingLimbSegment) select x).RandomElement());
                     dinfo = new DamageInfo(damageType, num, armorPenetration, -1f, this, targetPart);
 
-
                 }
                 //Damage worker when not targeting legs.
                 else
@@ -105,7 +106,7 @@ namespace DShield_Framework
                 DamageWorker.DamageResult damageResult = pawn.TakeDamage(dinfo);
 
                 //if hediff is on a limb by limb basis and exists, apply it.
-                if (hediffExistsAndNotAppliedToWholeBody)
+                if (applyHedifftoWholebody)
                 {
                     hediffApplicationComparisons(pawn, appliedHediff, hediffFactor, damageResult.LastHitPart);
                 }
@@ -120,8 +121,6 @@ namespace DShield_Framework
                 }
             }
         }
-
-
 
 
         private static void hediffApplicationComparisons(Pawn p, HediffDef h, FloatRange hediffFactor, BodyPartRecord targetPart)
@@ -144,3 +143,5 @@ namespace DShield_Framework
         }
     }
 }
+
+
