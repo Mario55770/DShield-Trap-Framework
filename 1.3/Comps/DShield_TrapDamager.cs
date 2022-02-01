@@ -81,9 +81,6 @@ namespace DShield_Framework
                 //gives a random severity of hediff between stated range. Defaults to 0 and 1 respectively, which is the default hediff range.
                 HealthUtility.AdjustSeverity(pawn, appliedHediff, hediffFactor.RandomInRange);
             }
-            //checks to boolean only if this doesnt run and sets it true here so it doesn't have to be repeadely checked in the loop
-            
-            //gets variable outside the for loop instead of reading from xml DamageCount times
             
             for (int i = 0; (float)i < DamageCount; i++)
             {
