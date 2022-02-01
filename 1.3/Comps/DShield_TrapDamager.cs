@@ -31,6 +31,9 @@ namespace DShield_Framework
 
         protected override void SpringSub(Pawn pawn)
         {
+            //caches stuff. Should make this whole system run slightly faster for traps that are run multiple times
+            //improvements are likely negligible to loses in single use per map load.
+            //Only runs efforts to cache if it runs as traps may not always be used and so it is pointless to cache it if its not used.
             if (!hasBeenCached)
             {
                 
@@ -50,8 +53,7 @@ namespace DShield_Framework
                 compRefuelable = this.GetComp<CompRefuelable>();
                 hasBeenCached = true;
             }
-            //if fuel is not empty or null, lets class run.
-
+            //If pawn is null, or trap uses fuel and is out, end the method. In theory, slight improvements could come from only caching the rest after this test
             if (pawn == null || !(compRefuelable == null || compRefuelable.Fuel > 0))
             {
                 return;
@@ -66,24 +68,17 @@ namespace DShield_Framework
             
             SoundDefOf.TrapSpring.PlayOneShot(new TargetInfo(base.Position, base.Map));
 
-            //this changes on each run
+            //this changes on each run ergo it has been kept here. 
             float num = this.GetStatValue(StatDefOf.TrapMeleeDamage) * DamageRandomFactorRange.RandomInRange / DamageCount;
             float armorPenetration = num * 0.015f;
 
             
-            //For some reason this needs to be outside the if statement.
-            
-            //null check, should stop this chunk from running if its not defined.
-            //Applies the hediff assuming its applied to whole body instead of on a hit by hit basis(like anesthetic should be)
-            
+            //Applies hediff to whole body assuming prior tests are passed(in the event hediff is not null and it should be applied to whole body)
             if (hediffNotNullAndApplyToWholeBody)
             {
                 //gives a random severity of hediff between stated range. Defaults to 0 and 1 respectively, which is the default hediff range.
                 HealthUtility.AdjustSeverity(pawn, appliedHediff, hediffFactor.RandomInRange);
             }
-            //checks to boolean only if this doesnt run and sets it true here so it doesn't have to be repeadely checked in the loop
-            
-            //gets variable outside the for loop instead of reading from xml DamageCount times
             
             for (int i = 0; (float)i < DamageCount; i++)
             {
