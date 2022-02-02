@@ -9,15 +9,15 @@ namespace DShield_Framework
     {
 
         private static readonly FloatRange DamageRandomFactorRange = new FloatRange(0.8f, 1.2f);
-        private static HediffDef appliedHediff;
-        private static float DamageCount;
-        private static DamageDef damageType;
-        private static FloatRange hediffFactor;
-        private static bool applyHedifftoWholebody;
-        private static TrapDef trapDef;
-        private static bool targetLegs;
-        private static CompRefuelable compRefuelable;
-        private static bool hasBeenCached = false;
+        private HediffDef appliedHediff;
+        private float DamageCount;
+        private DamageDef damageType;
+        private FloatRange hediffFactor;
+        private bool applyHedifftoWholebody;
+        private TrapDef trapDef;
+        private bool targetLegs;
+        private CompRefuelable compRefuelable;
+        private bool hasBeenCached = false;
         public override void SpawnSetup(Map map, bool respawningAfterLoad)
         {
             base.SpawnSetup(map, respawningAfterLoad);
