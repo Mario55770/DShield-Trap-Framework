@@ -58,14 +58,14 @@ namespace DShield_Framework
            
 
             //Checks if fuel is not null and not zero. If it is then end. 
-            if (compRefuelable ==null || compRefuelable.Fuel > 0)
+            if (compRefuelable !=null && compRefuelable.Fuel > 0)
             {
                 compRefuelable.ConsumeFuel(compRefuelable.Props.FuelMultiplierCurrentDifficulty);
             }
-            
-                //if it didn't end, double check if fuel needs to be consumed.
+            //if it didn't end, double check if fuel needs to be consumed. 
+            else if (compRefuelable!=null)                
             {
-                
+                return;
             }
 
             SoundDefOf.TrapSpring.PlayOneShot(new TargetInfo(base.Position, base.Map));
